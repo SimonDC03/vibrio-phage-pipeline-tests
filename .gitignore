@@ -1,1 +1,25 @@
+# Large sequencing files
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.fasta
+*.fa
+*.fna
+*.gz
+*.bam
+*.sam
 
+# Output folders
+results/
+logs/
+test_data/
+
+# Temporary files
+*.out
+*.err
+*.tmp
+
+# Conda / system files
+.DS_Store
+__pycache__/
