@@ -1,0 +1,33 @@
+# VIBRANT testing notes
+
+## Purpose
+
+This file records testing of VIBRANT as part of the phage prediction software comparison.
+
+## Software
+
+- Tool: VIBRANT
+- Conda environment: `vibrant`
+
+## Test 1 — reference FASTA input
+
+### Input file
+
+`australia_vibrio_phage_refs.fasta`
+
+### Input type
+
+FASTA file containing reference/assembled phage sequences, not raw FASTQ reads.
+
+### Purpose
+
+The purpose of this test was to check whether VIBRANT could be installed, set up, and run successfully on the same test FASTA file used for VirSorter2.
+
+### Database setup issue
+
+The first VIBRANT run failed because the required KEGG HMM database files were missing.
+
+Error message:
+
+```text
+VIBRANT error: could not identify KEGG HMM files in database directory. Please run VIBRANT_setup.py.
