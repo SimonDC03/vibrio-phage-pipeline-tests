@@ -1,1 +1,32 @@
+#!/bin/bash
+#SBATCH --job-name=medaka_polish
+#SBATCH --output=medaka_%j.log
+#SBATCH --error=medaka_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=6:00:00
+#SBATCH --account=project0026
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate phage-assembly
+
+READS_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/test_data/EBM1723_small
+ASSEMBLY=/mnt/data/project0026/student_data/2655065d/phageproject/results/flye_output/assembly.fasta
+OUT=/mnt/data/project0026/student_data/2655065d/phageproject/results/medaka_output
+
+mkdir -p $OUT
+
+# Merge reads temporarily for medaka
+cat ${READS_DIR}/*.fastq.gz > ${OUT}/merged_reads.fastq.gz
+
+medaka_consensus \
+  -i ${OUT}/merged_reads.fastq.gz \
+  -d ${ASSEMBLY} \
+  -o ${OUT} \
+  -t 8 \
+  -m r1041_e82_400bps_sup_v5.2.0
+
+
+
 
