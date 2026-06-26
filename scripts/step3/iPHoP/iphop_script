@@ -1,1 +1,24 @@
 
+
+#!/bin/bash
+#SBATCH --job-name=iphop_db
+#SBATCH --output=iphop_db_%j.log
+#SBATCH --error=iphop_db_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
+#SBATCH --time=4:00:00
+#SBATCH --account=project0026
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate iphop
+
+DB_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/databases/iphop_db
+mkdir -p $DB_DIR
+cd $DB_DIR
+
+wget https://portal.nersc.gov/cfs/m342/iphop/db/iPHoP_db_rw_1.4_for-test.tar.gz
+tar -zxvf iPHoP_db_rw_1.4_for-test.tar.gz
+
+
+
