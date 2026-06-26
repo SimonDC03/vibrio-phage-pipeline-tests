@@ -1,1 +1,30 @@
 
+
+#!/bin/bash
+#SBATCH --job-name=wish
+#SBATCH --output=wish_%j.log
+#SBATCH --error=wish_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=16G
+#SBATCH --time=2:00:00
+#SBATCH --account=project0026
+
+WISH=/mnt/data/project0026/student_data/2655065d/phageproject/software/WIsH/WIsH
+HOST_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/reference_genomes/vibrio_hosts
+MODELS=/mnt/data/project0026/student_data/2655065d/phageproject/results/wish_output/host_models
+PHAGE=/mnt/data/project0026/student_data/2655065d/phageproject/results/phage_contigs_final.fa
+OUT=/mnt/data/project0026/student_data/2655065d/phageproject/results/wish_output/predictions
+
+# Step 1: build models from host genomes
+$WISH -c build -g $HOST_DIR -m $MODELS -t 8
+
+# Step 2: predict hosts for phage contigs
+$WISH -c predict -g /mnt/data/project0026/student_data/2655065d/phageproject/results/wish_output/phage_dir -m $MODEL$
+
+
+
+
+
+
+
