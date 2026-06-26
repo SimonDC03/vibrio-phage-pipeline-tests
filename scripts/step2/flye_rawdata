@@ -1,0 +1,35 @@
+#!/bin/bash
+#SBATCH --job-name=flye_array
+#SBATCH --output=flye_%A_%a.log
+#SBATCH --error=flye_%A_%a.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=24:00:00
+#SBATCH --account=project0026
+#SBATCH --array=0-29
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate phage-assembly
+
+RAW_DATA=/mnt/data/project0026/student_data/2655065d/phageproject/raw_data/glasgow_fastq_16062026
+RESULTS=/mnt/data/project0026/student_data/2655065d/phageproject/results
+
+SAMPLES=($(ls $RAW_DATA | grep "EBM"))
+SAMPLE=${SAMPLES[$SLURM_ARRAY_TASK_ID]}
+INPUT_DIR=${RAW_DATA}/${SAMPLE}
+OUT_DIR=${RESULTS}/flye_output/${SAMPLE}
+
+echo "Processing sample: $SAMPLE"
+
+mkdir -p $OUT_DIR
+
+READ_FILES=$(ls ${INPUT_DIR}/*.fastq.gz | tr '\n' ' ')
+
+flye \
+  --nano-hq $READ_FILES \
+  --meta \
+  --out-dir $OUT_DIR \
+  --threads 16
+
+echo "Flye done: $SAMPLE"
