@@ -1,1 +1,24 @@
+#!/bin/bash
+#SBATCH --job-name=flye_assembly
+#SBATCH --output=flye_%j.log
+#SBATCH --error=flye_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=12:00:00
+#SBATCH --account=project0026
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate phage-assembly
+
+mkdir -p /mnt/data/project0026/student_data/2655065d/phageproject/results/flye_output
+
+READ_FILES=$(ls /mnt/data/project0026/student_data/2655065d/phageproject/test_data/EBM1723_small/*.fastq.gz | tr '\n$
+
+flye \
+  --nano-hq $READ_FILES \
+  --meta \
+  --out-dir /mnt/data/project0026/student_data/2655065d/phageproject/results/flye_output \
+  --threads 16
+
 
