@@ -1,0 +1,45 @@
+#!/bin/bash
+#SBATCH --job-name=qc_array
+#SBATCH --output=qc_%A_%a.log
+#SBATCH --error=qc_%A_%a.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
+#SBATCH --time=4:00:00
+#SBATCH --account=project0026
+#SBATCH --array=0-29
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate nanoplot
+
+RAW_DATA=/mnt/data/project0026/student_data/2655065d/phageproject/raw_data/glasgow_fastq_16062026
+OUT_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/results/qc
+NANOPLOT=/mnt/data/project0026/student_data/2655065d/.conda/envs/nanoplot/bin/NanoPlot
+
+# Get list of samples and pick the one for this array task
+SAMPLES=($(ls $RAW_DATA | grep "EBM"))
+SAMPLE=${SAMPLES[$SLURM_ARRAY_TASK_ID]}
+INPUT_DIR=${RAW_DATA}/${SAMPLE}
+
+echo "Processing sample: $SAMPLE"
+
+FASTQC_OUT="${OUT_DIR}/${SAMPLE}/fastqc"
+NANOPLOT_OUT="${OUT_DIR}/${SAMPLE}/nanoplot"
+mkdir -p "$FASTQC_OUT"
+mkdir -p "$NANOPLOT_OUT"
+
+# Fix glob issue - use ls to get file list
+FASTQ_FILES=$(ls ${INPUT_DIR}/*.fastq.gz | tr '\n' ' ')
+
+# FastQC
+fastqc $FASTQ_FILES \
+  -o "$FASTQC_OUT" \
+  -t 4
+
+# NanoPlot
+$NANOPLOT \
+  --fastq $FASTQ_FILES \
+  -o "$NANOPLOT_OUT" \
+  -t 4
+
+echo "Done: $SAMPLE"
