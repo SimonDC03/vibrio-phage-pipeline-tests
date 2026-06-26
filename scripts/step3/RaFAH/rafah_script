@@ -1,1 +1,27 @@
+#!/bin/bash
+#SBATCH --job-name=rafah
+#SBATCH --output=rafah_%j.log
+#SBATCH --error=rafah_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=4:00:00
+#SBATCH --account=project0026
 
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate rafah
+
+RAFAH_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/software/RaFAH
+OUT_DIR=/mnt/data/project0026/student_data/2655065d/phageproject/results/rafah_output
+
+mkdir -p $OUT_DIR
+cd $OUT_DIR
+
+perl ${RAFAH_DIR}/RaFAH.pl \
+  --predict \
+  --genomes_dir /mnt/data/project0026/student_data/2655065d/phageproject/results/wish_output/phage_dir \
+  --extension fasta \
+  --threads 8 \
+  --valid_ogs_file ${RAFAH_DIR}/HP_Ranger_Model_3_Valid_Cols.txt \
+  --r_model_file_name ${RAFAH_DIR}/MMSeqs_Clusters_Ranger_Model_1+2+3_Clean.RData \
+  --r_script_predict_file_name ${RAFAH_DIR}/RaFAH_Predict_Host.R
