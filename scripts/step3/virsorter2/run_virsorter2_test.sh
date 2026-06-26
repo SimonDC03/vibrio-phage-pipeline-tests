@@ -1,23 +1,24 @@
-# VirSorter2-test
 
-This repository is for testing VirSorter2 as part of a bacteriophage discovery project.
+#!/bin/bash
+#SBATCH --job-name=virsorter2
+#SBATCH --output=virsorter2_%j.log
+#SBATCH --error=virsorter2_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=12:00:00
+#SBATCH --account=project0026
 
-## Aim
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate virsorter2
 
-The aim of this test repository is to check whether VirSorter2 can identify viral/phage sequences from small example datasets before applying the workflow to larger environmental metagenomic datasets.
+mkdir -p /mnt/data/project0026/student_data/2655065d/phageproject/results/virsorter2_output
 
-## Current test
-
-Initial test dataset:
-
-- `australia_vibrio_phage_refs.fasta`
-
-Initial command tested:
-
-```bash
 virsorter run \
-  -w virsorter2_output \
-  -i australia_vibrio_phage_refs.fasta \
-  --min-length 1500 \
-  -j 4 \
+  -i /mnt/data/project0026/student_data/2655065d/phageproject/results/medaka_output/consensus.fasta \
+  -w /mnt/data/project0026/student_data/2655065d/phageproject/results/virsorter2_output \
+  --db-dir /mnt/data/project0026/student_data/2655065d/phageproject/databases/virsorter2_db \
+  --min-length 5000 \
+  -j 16 \
   all
+
