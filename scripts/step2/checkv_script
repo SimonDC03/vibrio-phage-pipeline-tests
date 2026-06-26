@@ -1,1 +1,21 @@
+#!/bin/bash
+#SBATCH --job-name=checkv
+#SBATCH --output=checkv_%j.log
+#SBATCH --error=checkv_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=4:00:00
+#SBATCH --account=project0026
+
+source /mnt/data/project0026/student_data/2655065d/miniforge3/etc/profile.d/conda.sh
+conda activate checkv
+
+mkdir -p /mnt/data/project0026/student_data/2655065d/phageproject/results/checkv_output
+
+checkv end_to_end \
+  /mnt/data/project0026/student_data/2655065d/phageproject/results/virsorter2_output/final-viral-combined.fa \
+  /mnt/data/project0026/student_data/2655065d/phageproject/results/checkv_output \
+  -d /mnt/data/project0026/student_data/2655065d/phageproject/databases/checkv_db/checkv-db-v1.5
+  -t 8
 
